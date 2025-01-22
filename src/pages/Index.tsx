@@ -7,6 +7,11 @@ import { getRecommendations } from '../lib/recommendations';
 import { toast } from 'sonner';
 import { pipeline } from '@huggingface/transformers';
 
+interface ClassificationResult {
+  label: string;
+  score: number;
+}
+
 const Index = () => {
   const [prediction, setPrediction] = useState<string | null>(null);
   const [confidence, setConfidence] = useState<number>(0);
@@ -25,8 +30,8 @@ const Index = () => {
         { device: 'cpu' }
       );
 
-      // Classify the image
-      const results = await classifier(imageData);
+      // Classify the image and type assert the result
+      const results = (await classifier(imageData)) as ClassificationResult[];
       
       // Map the model's output to our categories
       let detectedType = 'waste';

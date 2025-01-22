@@ -2,59 +2,67 @@ import React, { useState } from 'react';
 import ImageUpload from '../components/ImageUpload';
 import ResultsDisplay from '../components/ResultsDisplay';
 import RecommendationCard from '../components/RecommendationCard';
+import RewardsCard from '../components/RewardsCard';
 import { getRecommendations } from '../lib/recommendations';
 import { toast } from 'sonner';
+import { pipeline } from '@huggingface/transformers';
 
 const Index = () => {
   const [prediction, setPrediction] = useState<string | null>(null);
   const [confidence, setConfidence] = useState<number>(0);
+  const [points, setPoints] = useState<number>(0);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleImageSelected = async (imageData: string) => {
     try {
-      // Simulate ML model prediction with more specific categories
-      const mockPredictions = [
-        { type: 'waste', subtypes: ['organic_waste', 'food_waste', 'rotten_food'], confidence: 0.92 },
-        { type: 'vehicle', subtypes: ['car', 'truck', 'motorcycle'], confidence: 0.89 },
-        { type: 'factory', subtypes: ['industrial', 'manufacturing', 'processing'], confidence: 0.87 }
-      ];
+      setIsAnalyzing(true);
+      toast.info('Analyzing image...', { duration: 2000 });
+
+      // Initialize the image classification pipeline
+      const classifier = await pipeline(
+        'image-classification',
+        'onnx-community/mobilenetv4_conv_small.e2400_r224_in1k',
+        { device: 'cpu' }
+      );
+
+      // Classify the image
+      const results = await classifier(imageData);
       
-      // Simulate analyzing the image content more specifically
-      const imageContent = imageData.toLowerCase();
-      let selectedPrediction;
+      // Map the model's output to our categories
+      let detectedType = 'waste';
+      const label = results[0].label.toLowerCase();
       
-      // More specific detection logic
-      if (imageContent.includes('waste') || imageContent.includes('banana') || imageContent.includes('food')) {
-        selectedPrediction = mockPredictions[0];
-      } else if (imageContent.includes('vehicle') || imageContent.includes('car')) {
-        selectedPrediction = mockPredictions[1];
-      } else if (imageContent.includes('factory') || imageContent.includes('industry')) {
-        selectedPrediction = mockPredictions[2];
-      } else {
-        // Default to waste prediction with adjusted confidence for unknown items
-        selectedPrediction = {
-          type: 'waste',
-          subtypes: ['organic_waste'],
-          confidence: 0.95 // High confidence for waste detection
-        };
+      if (label.includes('car') || label.includes('truck') || label.includes('bus')) {
+        detectedType = 'vehicle';
+      } else if (label.includes('factory') || label.includes('building')) {
+        detectedType = 'factory';
+      } else if (label.includes('food') || label.includes('waste') || label.includes('organic')) {
+        detectedType = 'waste';
       }
+
+      setPrediction(detectedType);
+      setConfidence(results[0].score);
       
-      setPrediction(selectedPrediction.type);
-      setConfidence(selectedPrediction.confidence);
+      // Award points based on detection
+      const newPoints = points + 10;
+      setPoints(newPoints);
       
       toast.success('Analysis complete!');
     } catch (error) {
       console.error('Error analyzing image:', error);
       toast.error('Error analyzing image. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
   const recommendations = prediction ? getRecommendations(prediction) : [];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-eco/5 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-forest mb-4">
+          <h1 className="text-4xl font-bold text-forest mb-4 animate-fade-in">
             Carbon Footprint Detector
           </h1>
           <p className="text-xl text-gray-600">
@@ -62,10 +70,22 @@ const Index = () => {
           </p>
         </div>
 
-        <ImageUpload onImageSelected={handleImageSelected} />
+        <div className="grid gap-8 md:grid-cols-2">
+          <div>
+            <ImageUpload onImageSelected={handleImageSelected} />
+            {isAnalyzing && (
+              <div className="mt-4 text-center text-forest animate-pulse">
+                Analyzing image...
+              </div>
+            )}
+          </div>
+          <div>
+            <RewardsCard points={points} />
+          </div>
+        </div>
         
         {prediction && (
-          <div className="mt-12 space-y-6">
+          <div className="mt-12 space-y-6 animate-fade-in">
             <ResultsDisplay 
               prediction={prediction} 
               confidence={confidence}

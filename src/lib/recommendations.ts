@@ -7,38 +7,53 @@ interface Recommendation {
 const recommendations: Record<string, Recommendation[]> = {
   vehicle: [
     {
-      title: "Use Public Transportation",
-      description: "Switch to buses or trains for your daily commute to significantly reduce your carbon footprint.",
-      impact: "Reduce emissions by up to 20%"
+      title: "Switch to Electric Vehicles",
+      description: "Consider transitioning to electric or hybrid vehicles for significant reduction in carbon emissions. Many governments offer incentives for EV adoption.",
+      impact: "Reduce emissions by up to 50%"
     },
     {
-      title: "Consider Carpooling",
-      description: "Share rides with colleagues or use carpooling apps to decrease the number of vehicles on the road.",
-      impact: "Save 2.2 tons CO2/year"
+      title: "Optimize Route Planning",
+      description: "Use smart navigation apps to find the most fuel-efficient routes and avoid traffic congestion.",
+      impact: "Save up to 20% fuel consumption"
+    },
+    {
+      title: "Regular Maintenance",
+      description: "Keep your vehicle well-maintained with regular service checks to ensure optimal fuel efficiency.",
+      impact: "Improve efficiency by 15%"
     }
   ],
   factory: [
     {
-      title: "Energy Efficiency Audit",
-      description: "Conduct regular energy audits to identify and fix inefficient processes and equipment.",
-      impact: "Up to 30% energy savings"
+      title: "Renewable Energy Integration",
+      description: "Install solar panels or wind turbines to power operations. Consider energy storage solutions for consistent supply.",
+      impact: "Reduce emissions by 60%"
     },
     {
-      title: "Renewable Energy Integration",
-      description: "Implement solar panels or wind energy solutions to power operations.",
-      impact: "Reduce emissions by 40-60%"
+      title: "Smart Energy Management",
+      description: "Implement IoT sensors and smart meters to monitor and optimize energy consumption in real-time.",
+      impact: "Save 30% on energy costs"
+    },
+    {
+      title: "Waste Heat Recovery",
+      description: "Install heat exchangers and recovery systems to capture and reuse waste heat from industrial processes.",
+      impact: "Improve efficiency by 25%"
     }
   ],
   waste: [
     {
-      title: "Implement Recycling Program",
-      description: "Set up comprehensive recycling systems and educate about proper waste segregation.",
-      impact: "Divert 70% waste from landfills"
+      title: "Composting Program",
+      description: "Start composting organic waste to create nutrient-rich soil for gardens and reduce methane emissions from landfills.",
+      impact: "Divert 40% waste from landfills"
     },
     {
-      title: "Composting Initiative",
-      description: "Start composting organic waste to reduce methane emissions from landfills.",
-      impact: "Reduce methane by 50%"
+      title: "Recycling Innovation",
+      description: "Implement advanced sorting systems and partner with recycling facilities to maximize material recovery.",
+      impact: "Achieve 80% recycling rate"
+    },
+    {
+      title: "Zero Waste Initiative",
+      description: "Develop strategies to eliminate waste through better product design and material selection.",
+      impact: "Reduce waste by 90%"
     }
   ]
 };

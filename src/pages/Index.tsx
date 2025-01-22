@@ -6,6 +6,7 @@ import RewardsCard from '../components/RewardsCard';
 import { getRecommendations } from '../lib/recommendations';
 import { toast } from 'sonner';
 import { pipeline } from '@huggingface/transformers';
+import { Leaf } from 'lucide-react';
 
 interface ClassificationResult {
   label: string;
@@ -24,38 +25,44 @@ const Index = () => {
       toast.info('Analyzing image...', { duration: 2000 });
 
       // Try WebGPU first, fall back to WebAssembly
-      const device = 'webgpu';
+      let device = 'webgpu';
       
-      // Initialize the image classification pipeline
-      const classifier = await pipeline(
-        'image-classification',
-        'onnx-community/mobilenetv4_conv_small.e2400_r224_in1k',
-        { device }
-      );
+      try {
+        // Initialize the image classification pipeline
+        const classifier = await pipeline(
+          'image-classification',
+          'onnx-community/mobilenetv4_conv_small.e2400_r224_in1k',
+          { device }
+        );
 
-      // Classify the image and type assert the result
-      const results = (await classifier(imageData)) as ClassificationResult[];
-      
-      // Map the model's output to our categories
-      let detectedType = 'waste';
-      const label = results[0].label.toLowerCase();
-      
-      if (label.includes('car') || label.includes('truck') || label.includes('bus')) {
-        detectedType = 'vehicle';
-      } else if (label.includes('factory') || label.includes('building')) {
-        detectedType = 'factory';
-      } else if (label.includes('food') || label.includes('waste') || label.includes('organic')) {
-        detectedType = 'waste';
+        // Classify the image and type assert the result
+        const results = (await classifier(imageData)) as ClassificationResult[];
+        
+        // Map the model's output to our categories
+        let detectedType = 'waste';
+        const label = results[0].label.toLowerCase();
+        
+        if (label.includes('car') || label.includes('truck') || label.includes('bus')) {
+          detectedType = 'vehicle';
+        } else if (label.includes('factory') || label.includes('building')) {
+          detectedType = 'factory';
+        } else if (label.includes('food') || label.includes('waste') || label.includes('organic')) {
+          detectedType = 'waste';
+        }
+
+        setPrediction(detectedType);
+        setConfidence(results[0].score);
+        
+        // Award points based on detection
+        const newPoints = points + 10;
+        setPoints(newPoints);
+        
+        toast.success('Analysis complete!');
+      } catch (gpuError) {
+        console.error('WebGPU failed, falling back to WebAssembly:', gpuError);
+        device = 'cpu';
+        toast.error('WebGPU not available. Please try again.');
       }
-
-      setPrediction(detectedType);
-      setConfidence(results[0].score);
-      
-      // Award points based on detection
-      const newPoints = points + 10;
-      setPoints(newPoints);
-      
-      toast.success('Analysis complete!');
     } catch (error) {
       console.error('Error analyzing image:', error);
       toast.error('Error analyzing image. Please try again.');
@@ -69,12 +76,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-eco/5 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-forest mb-4 animate-fade-in">
-            Carbon Footprint Detector
-          </h1>
-          <p className="text-xl text-gray-600">
-            Upload an image to identify emission sources and get recommendations
+        <div className="text-center mb-12 animate-fade-in">
+          <div className="flex items-center justify-center mb-4">
+            <Leaf className="h-12 w-12 text-forest mr-2" />
+            <h1 className="text-4xl font-bold text-forest">
+              EcoTrack
+            </h1>
+          </div>
+          <p className="text-xl text-gray-600 mt-2">
+            Track Your Impact, Change the Future
           </p>
         </div>
 

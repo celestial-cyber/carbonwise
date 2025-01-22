@@ -23,11 +23,14 @@ const Index = () => {
       setIsAnalyzing(true);
       toast.info('Analyzing image...', { duration: 2000 });
 
+      // Try WebGPU first, fall back to WebAssembly
+      const device = 'webgpu';
+      
       // Initialize the image classification pipeline
       const classifier = await pipeline(
         'image-classification',
         'onnx-community/mobilenetv4_conv_small.e2400_r224_in1k',
-        { device: 'cpu' }
+        { device }
       );
 
       // Classify the image and type assert the result

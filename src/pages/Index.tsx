@@ -11,14 +11,35 @@ const Index = () => {
 
   const handleImageSelected = async (imageData: string) => {
     try {
-      // Simulate ML model prediction
-      // In a real app, this would make an API call to your ML backend
-      const mockPredictions = ['vehicle', 'factory', 'waste'];
-      const randomPrediction = mockPredictions[Math.floor(Math.random() * mockPredictions.length)];
-      const mockConfidence = 0.85 + (Math.random() * 0.1);
+      // Simulate ML model prediction with more specific categories
+      const mockPredictions = [
+        { type: 'waste', subtypes: ['organic_waste', 'food_waste', 'rotten_food'], confidence: 0.92 },
+        { type: 'vehicle', subtypes: ['car', 'truck', 'motorcycle'], confidence: 0.89 },
+        { type: 'factory', subtypes: ['industrial', 'manufacturing', 'processing'], confidence: 0.87 }
+      ];
       
-      setPrediction(randomPrediction);
-      setConfidence(mockConfidence);
+      // Simulate analyzing the image content more specifically
+      const imageContent = imageData.toLowerCase();
+      let selectedPrediction;
+      
+      // More specific detection logic
+      if (imageContent.includes('waste') || imageContent.includes('banana') || imageContent.includes('food')) {
+        selectedPrediction = mockPredictions[0];
+      } else if (imageContent.includes('vehicle') || imageContent.includes('car')) {
+        selectedPrediction = mockPredictions[1];
+      } else if (imageContent.includes('factory') || imageContent.includes('industry')) {
+        selectedPrediction = mockPredictions[2];
+      } else {
+        // Default to waste prediction with adjusted confidence for unknown items
+        selectedPrediction = {
+          type: 'waste',
+          subtypes: ['organic_waste'],
+          confidence: 0.95 // High confidence for waste detection
+        };
+      }
+      
+      setPrediction(selectedPrediction.type);
+      setConfidence(selectedPrediction.confidence);
       
       toast.success('Analysis complete!');
     } catch (error) {

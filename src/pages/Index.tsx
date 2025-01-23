@@ -25,17 +25,14 @@ const Index = () => {
       setIsAnalyzing(true);
       toast.info('Analyzing image...', { duration: 2000 });
 
-      // Initialize the image classification pipeline with correct device type
       const classifier = await pipeline(
         'image-classification',
         'onnx-community/mobilenetv4_conv_small.e2400_r224_in1k',
         { device: 'webgpu' as const }
       );
 
-      // Classify the image and type assert the result
       const results = (await classifier(imageData)) as ClassificationResult[];
       
-      // Map the model's output to our categories
       let detectedType = 'waste';
       const label = results[0].label.toLowerCase();
       
@@ -50,7 +47,6 @@ const Index = () => {
       setPrediction(detectedType);
       setConfidence(results[0].score);
       
-      // Award points based on detection
       const newPoints = points + 10;
       setPoints(newPoints);
       

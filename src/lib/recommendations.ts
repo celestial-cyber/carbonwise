@@ -39,21 +39,38 @@ const recommendations: Record<string, Recommendation[]> = {
       impact: "Improve efficiency by 25%"
     }
   ],
-  waste: [
+  biodegradable: [
     {
-      title: "Composting Program",
-      description: "Start composting organic waste to create nutrient-rich soil for gardens and reduce methane emissions from landfills.",
-      impact: "Divert 40% waste from landfills"
+      title: "Start Composting",
+      description: "Turn your organic waste into nutrient-rich compost for gardens and plants. This reduces methane emissions from landfills.",
+      impact: "Reduce waste by 30%"
     },
     {
-      title: "Recycling Innovation",
-      description: "Implement advanced sorting systems and partner with recycling facilities to maximize material recovery.",
-      impact: "Achieve 80% recycling rate"
+      title: "Garden Integration",
+      description: "Use your composted materials in a home garden to grow your own vegetables and herbs.",
+      impact: "Zero waste gardening"
     },
     {
-      title: "Zero Waste Initiative",
-      description: "Develop strategies to eliminate waste through better product design and material selection.",
-      impact: "Reduce waste by 90%"
+      title: "Community Sharing",
+      description: "Share excess compost with local community gardens or neighbors to maximize impact.",
+      impact: "Build sustainable communities"
+    }
+  ],
+  "non-biodegradable": [
+    {
+      title: "Proper Recycling",
+      description: "Ensure proper sorting and cleaning of recyclable materials before disposal.",
+      impact: "Increase recycling efficiency by 40%"
+    },
+    {
+      title: "Reduce Consumption",
+      description: "Choose reusable alternatives to reduce non-biodegradable waste generation.",
+      impact: "Reduce waste by 50%"
+    },
+    {
+      title: "Upcycling Projects",
+      description: "Transform non-biodegradable items into useful products through creative upcycling.",
+      impact: "Creative waste reduction"
     }
   ]
 };

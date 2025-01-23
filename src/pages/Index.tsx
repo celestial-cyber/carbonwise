@@ -36,10 +36,15 @@ const Index = () => {
       let detectedType = 'waste';
       const label = results[0].label.toLowerCase();
       
-      if (label.includes('car') || label.includes('truck') || label.includes('bus')) {
+      // Enhanced classification logic
+      if (label.includes('car') || label.includes('truck') || label.includes('bus') || label.includes('vehicle')) {
         detectedType = 'vehicle';
-      } else if (label.includes('factory') || label.includes('building')) {
+      } else if (label.includes('factory') || label.includes('building') || label.includes('industrial')) {
         detectedType = 'factory';
+      } else if (label.includes('food') || label.includes('organic') || label.includes('plant')) {
+        detectedType = 'biodegradable';
+      } else if (label.includes('plastic') || label.includes('metal') || label.includes('synthetic')) {
+        detectedType = 'non-biodegradable';
       }
 
       setPrediction(detectedType);

@@ -6,7 +6,8 @@ import RewardsCard from '../components/RewardsCard';
 import { getRecommendations } from '../lib/recommendations';
 import { toast } from 'sonner';
 import { pipeline } from '@huggingface/transformers';
-import { Leaf } from 'lucide-react';
+import { Leaf, BookOpen, BarChart3, Upload } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ClassificationResult {
   label: string;
@@ -65,8 +66,9 @@ const Index = () => {
   const recommendations = prediction ? getRecommendations(prediction) : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-eco/5 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-eco/5">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header Section */}
         <div className="text-center mb-12 animate-fade-in">
           <div className="flex items-center justify-center mb-4">
             <Leaf className="h-12 w-12 text-forest mr-2" />
@@ -79,42 +81,78 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
-          <div>
-            <ImageUpload onImageSelected={handleImageSelected} />
-            {isAnalyzing && (
-              <div className="mt-4 text-center text-forest animate-pulse">
-                Analyzing image...
-              </div>
+        {/* Main Content Grid */}
+        <div className="grid gap-8 lg:grid-cols-2">
+          {/* Left Column - Upload and Results */}
+          <div className="space-y-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Upload className="h-5 w-5" />
+                  Upload Image
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ImageUpload onImageSelected={handleImageSelected} />
+                {isAnalyzing && (
+                  <div className="mt-4 text-center text-forest animate-pulse">
+                    Analyzing image...
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {prediction && (
+              <Card className="animate-fade-in">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5" />
+                    Analysis Results
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResultsDisplay 
+                    prediction={prediction} 
+                    confidence={confidence}
+                  />
+                </CardContent>
+              </Card>
             )}
           </div>
-          <div>
-            <RewardsCard points={points} />
+
+          {/* Right Column - Rewards and Recommendations */}
+          <div className="space-y-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Your Impact</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <RewardsCard points={points} />
+              </CardContent>
+            </Card>
+
+            {prediction && (
+              <Card className="animate-fade-in">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5" />
+                    Recommendations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {recommendations.map((rec, index) => (
+                      <RecommendationCard 
+                        key={index} 
+                        recommendation={rec}
+                      />
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
-        
-        {prediction && (
-          <div className="mt-12 space-y-6 animate-fade-in">
-            <ResultsDisplay 
-              prediction={prediction} 
-              confidence={confidence}
-            />
-            
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold text-forest mb-6">
-                Recommendations
-              </h2>
-              <div className="space-y-4">
-                {recommendations.map((rec, index) => (
-                  <RecommendationCard 
-                    key={index} 
-                    recommendation={rec}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

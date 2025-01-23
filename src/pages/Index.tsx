@@ -6,7 +6,7 @@ import RewardsCard from '../components/RewardsCard';
 import { getRecommendations } from '../lib/recommendations';
 import { toast } from 'sonner';
 import { pipeline } from '@huggingface/transformers';
-import { Leaf, BookOpen, BarChart3, Upload } from 'lucide-react';
+import { Leaf, BookOpen, BarChart3, Upload, TreePine } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ClassificationResult {
@@ -40,8 +40,6 @@ const Index = () => {
         detectedType = 'vehicle';
       } else if (label.includes('factory') || label.includes('building')) {
         detectedType = 'factory';
-      } else if (label.includes('food') || label.includes('waste') || label.includes('organic')) {
-        detectedType = 'waste';
       }
 
       setPrediction(detectedType);
@@ -62,18 +60,18 @@ const Index = () => {
   const recommendations = prediction ? getRecommendations(prediction) : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-eco/5">
+    <div className="min-h-screen bg-gradient-to-b from-eco/5 to-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="text-center mb-12 animate-fade-in">
-          <div className="flex items-center justify-center mb-4">
-            <Leaf className="h-12 w-12 text-forest mr-2" />
-            <h1 className="text-4xl font-bold text-forest">
-              EcoTrack
+          <div className="flex items-center justify-center mb-4 space-x-3">
+            <TreePine className="h-12 w-12 text-forest" />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-forest to-eco bg-clip-text text-transparent">
+              EcoImageWise
             </h1>
           </div>
           <p className="text-xl text-gray-600 mt-2">
-            Track Your Impact, Change the Future
+            Detect, Analyze, and Reduce Your Carbon Footprint
           </p>
         </div>
 
@@ -81,9 +79,9 @@ const Index = () => {
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Left Column - Upload and Results */}
           <div className="space-y-8">
-            <Card>
+            <Card className="border-eco/20 hover:border-eco transition-colors">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-forest">
                   <Upload className="h-5 w-5" />
                   Upload Image
                 </CardTitle>
@@ -92,16 +90,16 @@ const Index = () => {
                 <ImageUpload onImageSelected={handleImageSelected} />
                 {isAnalyzing && (
                   <div className="mt-4 text-center text-forest animate-pulse">
-                    Analyzing image...
+                    Analyzing your image for environmental impact...
                   </div>
                 )}
               </CardContent>
             </Card>
 
             {prediction && (
-              <Card className="animate-fade-in">
+              <Card className="animate-fade-in border-eco/20 hover:border-eco transition-colors">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-forest">
                     <BarChart3 className="h-5 w-5" />
                     Analysis Results
                   </CardTitle>
@@ -118,9 +116,12 @@ const Index = () => {
 
           {/* Right Column - Rewards and Recommendations */}
           <div className="space-y-8">
-            <Card>
+            <Card className="border-eco/20 hover:border-eco transition-colors">
               <CardHeader>
-                <CardTitle>Your Impact</CardTitle>
+                <CardTitle className="flex items-center gap-2 text-forest">
+                  <Leaf className="h-5 w-5" />
+                  Your Impact
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <RewardsCard points={points} />
@@ -128,11 +129,11 @@ const Index = () => {
             </Card>
 
             {prediction && (
-              <Card className="animate-fade-in">
+              <Card className="animate-fade-in border-eco/20 hover:border-eco transition-colors">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-forest">
                     <BookOpen className="h-5 w-5" />
-                    Recommendations
+                    Eco-Friendly Recommendations
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

@@ -6,7 +6,7 @@ import RewardsCard from '../components/RewardsCard';
 import { getRecommendations } from '../lib/recommendations';
 import { toast } from 'sonner';
 import { pipeline } from '@huggingface/transformers';
-import { Leaf, BookOpen, BarChart3, Upload, TreePine } from 'lucide-react';
+import { Leaf, BookOpen, BarChart3, Upload } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ClassificationResult {
@@ -33,10 +33,10 @@ const Index = () => {
 
       const results = (await classifier(imageData)) as ClassificationResult[];
       
+      // Enhanced classification logic
       let detectedType = 'waste';
       const label = results[0].label.toLowerCase();
       
-      // Enhanced classification logic
       if (label.includes('car') || label.includes('truck') || label.includes('bus') || label.includes('vehicle')) {
         detectedType = 'vehicle';
       } else if (label.includes('factory') || label.includes('building') || label.includes('industrial')) {
@@ -65,17 +65,20 @@ const Index = () => {
   const recommendations = prediction ? getRecommendations(prediction) : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-eco/5 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-eco/10 to-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="text-center mb-12 animate-fade-in">
-          <div className="flex items-center justify-center mb-4 space-x-3">
-            <TreePine className="h-12 w-12 text-forest" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-forest to-eco bg-clip-text text-transparent">
-              EcoImageWise
+          <div className="flex items-center justify-center mb-4">
+            <div className="relative">
+              <Leaf className="h-12 w-12 text-eco animate-pulse" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-forest/20 to-eco/20 blur-lg -z-10" />
+            </div>
+            <h1 className="text-4xl font-bold ml-3 bg-gradient-to-r from-forest to-eco bg-clip-text text-transparent">
+              CarbonWise
             </h1>
           </div>
-          <p className="text-xl text-gray-600 mt-2">
+          <p className="text-xl text-gray-600 mt-2 font-light tracking-wide">
             Detect, Analyze, and Reduce Your Carbon Footprint
           </p>
         </div>
@@ -84,7 +87,7 @@ const Index = () => {
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Left Column - Upload and Results */}
           <div className="space-y-8">
-            <Card className="border-eco/20 hover:border-eco transition-colors">
+            <Card className="border-eco/20 hover:border-eco transition-colors duration-300 shadow-lg hover:shadow-eco/10">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-forest">
                   <Upload className="h-5 w-5" />
@@ -102,7 +105,7 @@ const Index = () => {
             </Card>
 
             {prediction && (
-              <Card className="animate-fade-in border-eco/20 hover:border-eco transition-colors">
+              <Card className="animate-fade-in border-eco/20 hover:border-eco transition-colors duration-300 shadow-lg hover:shadow-eco/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-forest">
                     <BarChart3 className="h-5 w-5" />
@@ -121,7 +124,7 @@ const Index = () => {
 
           {/* Right Column - Rewards and Recommendations */}
           <div className="space-y-8">
-            <Card className="border-eco/20 hover:border-eco transition-colors">
+            <Card className="border-eco/20 hover:border-eco transition-colors duration-300 shadow-lg hover:shadow-eco/10">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-forest">
                   <Leaf className="h-5 w-5" />
@@ -134,7 +137,7 @@ const Index = () => {
             </Card>
 
             {prediction && (
-              <Card className="animate-fade-in border-eco/20 hover:border-eco transition-colors">
+              <Card className="animate-fade-in border-eco/20 hover:border-eco transition-colors duration-300 shadow-lg hover:shadow-eco/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-forest">
                     <BookOpen className="h-5 w-5" />

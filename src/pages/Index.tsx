@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import { pipeline } from '@huggingface/transformers';
 import Header from '../components/Header';
 import AnalysisSection from '../components/AnalysisSection';
 import ResultsSection from '../components/ResultsSection';
 import ImpactSection from '../components/ImpactSection';
-
-interface ClassificationResult {
-  label: string;
-  score: number;
-}
+import AchievementsSection from '../components/AchievementsSection';
 
 const Index = () => {
   const [prediction, setPrediction] = useState<string | null>(null);
@@ -29,7 +24,7 @@ const Index = () => {
         { device: 'webgpu' as const }
       );
 
-      const results = (await classifier(imageData)) as ClassificationResult[];
+      const results = await classifier(imageData);
       
       let detectedType = 'waste';
       const label = results[0].label.toLowerCase();
@@ -72,10 +67,13 @@ const Index = () => {
             />
           </div>
 
-          <ImpactSection 
-            points={points}
-            prediction={prediction}
-          />
+          <div className="space-y-8">
+            <ImpactSection 
+              points={points}
+              prediction={prediction}
+            />
+            <AchievementsSection />
+          </div>
         </div>
       </div>
     </div>

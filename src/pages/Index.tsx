@@ -6,7 +6,7 @@ import RewardsCard from '../components/RewardsCard';
 import { getRecommendations } from '../lib/recommendations';
 import { toast } from 'sonner';
 import { pipeline } from '@huggingface/transformers';
-import { Leaf, BookOpen, BarChart3, Upload, TreePine } from 'lucide-react';
+import { Leaf, BookOpen, BarChart3, Upload } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ClassificationResult {
@@ -25,6 +25,7 @@ const Index = () => {
       setIsAnalyzing(true);
       toast.info('Analyzing image...', { duration: 2000 });
 
+      // Using WebGPU for faster analysis
       const classifier = await pipeline(
         'image-classification',
         'onnx-community/mobilenetv4_conv_small.e2400_r224_in1k',
@@ -65,9 +66,9 @@ const Index = () => {
         {/* Header Section */}
         <div className="text-center mb-12 animate-fade-in">
           <div className="flex items-center justify-center mb-4 space-x-3">
-            <TreePine className="h-12 w-12 text-forest" />
+            <Leaf className="h-12 w-12 text-eco animate-pulse" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-forest to-eco bg-clip-text text-transparent">
-              EcoImageWise
+              CarbonWise
             </h1>
           </div>
           <p className="text-xl text-gray-600 mt-2">

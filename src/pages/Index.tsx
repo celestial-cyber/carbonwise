@@ -6,6 +6,7 @@ import AnalysisSection from '../components/AnalysisSection';
 import ResultsSection from '../components/ResultsSection';
 import ImpactSection from '../components/ImpactSection';
 import AchievementsSection from '../components/AchievementsSection';
+import BiodegradableClassifier from '../components/BiodegradableClassifier';
 
 interface ClassificationResult {
   label: string;
@@ -70,6 +71,7 @@ const Index = () => {
               prediction={prediction}
               confidence={confidence}
             />
+            <BiodegradableClassifier />
           </div>
 
           <div className="space-y-8">

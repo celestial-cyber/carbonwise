@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
+import { pipeline } from '@huggingface/transformers';
 import Header from '../components/Header';
 import AnalysisSection from '../components/AnalysisSection';
 import ResultsSection from '../components/ResultsSection';
 import ImpactSection from '../components/ImpactSection';
 import AchievementsSection from '../components/AchievementsSection';
+
+interface ClassificationResult {
+  label: string;
+  score: number;
+}
 
 const Index = () => {
   const [prediction, setPrediction] = useState<string | null>(null);
@@ -17,14 +23,13 @@ const Index = () => {
       setIsAnalyzing(true);
       toast.info('Analyzing image...', { duration: 2000 });
 
-      // Using WebGPU for faster analysis
       const classifier = await pipeline(
         'image-classification',
         'onnx-community/mobilenetv4_conv_small.e2400_r224_in1k',
         { device: 'webgpu' as const }
       );
 
-      const results = await classifier(imageData);
+      const results = (await classifier(imageData)) as ClassificationResult[];
       
       let detectedType = 'waste';
       const label = results[0].label.toLowerCase();

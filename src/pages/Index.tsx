@@ -56,7 +56,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-eco/5 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#F2FCE2] to-white">
       <div className="container mx-auto px-4 py-8">
         <Header />
 

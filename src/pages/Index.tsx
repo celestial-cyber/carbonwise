@@ -7,7 +7,6 @@ import ResultsSection from '../components/ResultsSection';
 import ImpactSection from '../components/ImpactSection';
 import AchievementsSection from '../components/AchievementsSection';
 import BiodegradableClassifier from '../components/BiodegradableClassifier';
-import CodeExplanation from '../components/CodeExplanation';
 
 interface ClassificationResult {
   label: string;
@@ -73,7 +72,6 @@ const Index = () => {
               confidence={confidence}
             />
             <BiodegradableClassifier />
-            <CodeExplanation />
           </div>
 
           <div className="space-y-8">
